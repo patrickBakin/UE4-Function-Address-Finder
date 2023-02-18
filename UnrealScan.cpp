@@ -1,9 +1,4 @@
-/*  Written
- *
- *
- *
- *
- * 
+/*  Written By PotatoPie (Patrick)
  */
 
 
@@ -19,7 +14,7 @@ MODULEINFO moduleInfo;
 
 int main() {
   DWORD processId = 0; 
-  std::cout << "Written By PotatoPie\n"<<"PID: "<<std::endl;
+  std::cout << "Written By PotatoPie V.1.0.0\n"<<"PID: "<<std::endl;
   std::cin >> processId;
   hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId);
   if (hProcess == NULL) {
@@ -42,7 +37,7 @@ int main() {
   HMODULE* hMods = new HMODULE[cbNeeded / sizeof(HMODULE)];
   if (hMods == NULL) {
     std::cout << "Failed to allocate memory for module array." << std::endl;
-    
+    delete[] hMods;
     CloseHandle(hProcess);
     return 1;
   }
@@ -71,7 +66,7 @@ int main() {
   {
     BaseAddress = hExeModule;
     std::cout<<"Base Address: 0x"<<std::hex<<BaseAddress<<std::endl;
-    //MEMORY_BASIC_INFORMATION memInfo;
+   
     
     GetModuleInformation(hProcess,hExeModule,&moduleInfo,sizeof(moduleInfo));
     std::wstring wExeName(szModuleName);
@@ -87,23 +82,22 @@ int main() {
       
       if(UName::FindNames(PG))
       {
-          std::cout<<"UsingFNamePool: "<<ProfileGen::GetProfile().UseFNamePool<<"\nDumping Names..."<<std::endl;
+        std::cout<<"UsingFNamePool: "<<ProfileGen::GetProfile().UseFNamePool<<"\nDumping Names..."<<std::endl;
          
-          std::ofstream  Dump("DumpName.txt");
-         int NameNum=0;
-         if(!ProfileGen::GetProfile().UseFNamePool)
+        std::ofstream  Dump("DumpName.txt");
+        int NameNum=0;
+        if(!ProfileGen::GetProfile().UseFNamePool)
          {
              UName::TNameEntryArray::Names->DumpName(Dump,NameNum);
          }
-         else
+        else
          {
-           
-          UName::FNamePool::NamesData->DumpName(Dump,NameNum);
+            UName::FNamePool::NamesData->DumpName(Dump,NameNum);
          }
           
-          Dump.close();
+        Dump.close();
          
-          std::cout<<"Dumping "<<std::dec<<NameNum<<" Names \n"<<"Saving Dump as DumpName.txt" <<std::endl;
+        std::cout<<"Dumping "<<std::dec<<NameNum<<" Names \n"<<"Saving Dump as DumpName.txt" <<std::endl;
       }
       
       if(FunctionFinder::FindFunctions::GetFunctions())
