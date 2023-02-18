@@ -107,7 +107,7 @@ namespace FunctionFinder
         {
             if(auto StringAddr = Algorithm::ScanforStringRef(buffer,L"'{Message}': Bad or missing property '{PropertyName}'",reinterpret_cast<int64_t>(Address),0x3,"String Ref UObject::CallFunctionByNameWithArguments()"))
             {
-                auto pushCallFunctionByNameWithArguments = Algorithm::ScanFor(StringAddr,{0x41,0x56,0x41,0x57,0x48},true);
+                auto pushCallFunctionByNameWithArguments = Algorithm::ScanFor(StringAddr,{0x41,0x56,0x41,0x57,0x48},true,3500);
                 auto CallFunctionByNameWithArgumentsAddr = Algorithm::ScanFor(pushCallFunctionByNameWithArguments,{0x40,0x55},true,0x40);
                 std::cout << "CallFunctionByNameWithArguments: 0x"<<std::hex<<CallFunctionByNameWithArgumentsAddr<<std::endl;
                 ProfileGen::GetProfile().CallFunctionByNameWithArgumentsOffset=CallFunctionByNameWithArgumentsAddr-reinterpret_cast<int64_t>(BaseAddress);
