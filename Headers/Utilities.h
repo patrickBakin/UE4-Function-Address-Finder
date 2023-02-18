@@ -70,8 +70,8 @@ namespace Util
         if(UsingOldEngine)
         {
             std::cout<<"Engine Version "<<std::dec<<Algorithm::ReadAs<int16_t>(GEngineVersion)*10000+Algorithm::ReadAs<int16_t>(GEngineVersion+sizeof(int16_t))*100+Algorithm::ReadAs<int16_t>(GEngineVersion+2*sizeof(int16_t))<<std::endl;
-            PG.GetProfile().IsUsing4_22=false;
-            PG.GetProfile().IsUsingFChunkedFixedUObjectArray=false;
+            ProfileGen::GetProfile().IsUsing4_22=false;
+            ProfileGen::GetProfile().IsUsingFChunkedFixedUObjectArray=false;
             return 1;
             
         }
@@ -139,9 +139,9 @@ namespace Util
             VirtualFreeEx(hProcess, pRemoteBuffer, 0, MEM_RELEASE);
 
             CloseHandle(hThread);
-            PG.GetProfile().IsUsing4_22 = dwExitCode/100==422;
-            PG.GetProfile().IsUsingFChunkedFixedUObjectArray= dwExitCode/100 >=418;
-            PG.GetProfile().EngineVersion=dwExitCode;
+            ProfileGen::GetProfile().IsUsing4_22 = dwExitCode/100==422;
+            ProfileGen::GetProfile().IsUsingFChunkedFixedUObjectArray= dwExitCode/100 >=418;
+            ProfileGen::GetProfile().EngineVersion=dwExitCode;
             return 1;
             }
         

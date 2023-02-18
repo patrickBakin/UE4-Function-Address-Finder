@@ -9,7 +9,7 @@ MODULEINFO moduleInfo;
 
 
 int main() {
-  DWORD processId = 0; // Replace this with the process ID you want to check
+  DWORD processId = 0; 
   std::cout << "Written By PotatoPie\n"<<"PID: "<<std::endl;
   std::cin >> processId;
   hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId);
@@ -78,11 +78,11 @@ int main() {
       
       if(UName::FindNames(PG))
       {
-          std::cout<<"UsingFNamePool: "<<PG.GetProfile().UseFNamePool<<"\nDumping Names..."<<std::endl;
+          std::cout<<"UsingFNamePool: "<<ProfileGen::GetProfile().UseFNamePool<<"\nDumping Names..."<<std::endl;
          
           std::ofstream  Dump("DumpName.txt");
          int NameNum=0;
-         if(!PG.GetProfile().UseFNamePool)
+         if(!ProfileGen::GetProfile().UseFNamePool)
          {
              UName::TNameEntryArray::Names->DumpName(Dump,NameNum);
          }
@@ -97,15 +97,15 @@ int main() {
           std::cout<<"Dumping "<<std::dec<<NameNum<<" Names \n"<<"Saving Dump as DumpName.txt" <<std::endl;
       }
       
-      if(FunctionFinder::FindFunctions::GetFunctions(PG))
+      if(FunctionFinder::FindFunctions::GetFunctions())
       {
         
       }
-      if(Object::FindGObject(PG))
-        {
+      if(Object::FindGObject())
+      {
           
-        }
-      if(World::FindGWorld(PG))
+      }
+      if(World::FindGWorld())
       {
         
       }

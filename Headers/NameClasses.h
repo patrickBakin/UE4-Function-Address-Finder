@@ -88,7 +88,7 @@ namespace UName
         };
         int64_t address;
         int32_t NumElementsOffset=ProfileGen::GetProfile().IsUsing4_22 ? 4*ChunkTableSize: 8*ChunkTableSize;
-        int8_t NumChunksOffset=NumElementsOffset+0x4;
+        int32_t NumChunksOffset=NumElementsOffset+0x4;
     public:
         static TNameEntryArray* GetNames()
         {
@@ -103,18 +103,13 @@ namespace UName
         {
             if(address)
             {
-                int32_t Num;
-                auto add= address+0x8;
-                if(ReadProcessMemory(hProcess,(void*)(add),&Num,0x4,nullptr))
-                {
-                    return Num;
-                }
-                return 0;
+                return Algorithm::ReadAs<int32_t>(address+NumElementsOffset);
+                
             }
         }
         bool IsValidIndex(int Index)
         {
-            return Index >=0 && Index < Algorithm::ReadAs<int32_t>(address+NumElementsOffset) ;/*&& GetById(Index);*/
+            return Index >=0 && Index < Num() ;/*&& GetById(Index);*/
         }
         FNameEntry GetById(int Index)
         {
@@ -276,11 +271,11 @@ namespace UName
         bool IsValidIndex(int32_t key) const
         {
             uint32_t block = key >> 16;
-            uint16_t offset = key;
+            uint32_t offset = key;
             return IsValidIndex(key, block, offset);
         }
 
-        bool IsValidIndex(int32_t key, uint32_t block, uint16_t offset) const
+        bool IsValidIndex(int32_t key, uint32_t block, uint32_t offset) const
         {
             return (key >= 0 && block < NumBlocks() && offset * 2 < 0x1FFFE);
         }

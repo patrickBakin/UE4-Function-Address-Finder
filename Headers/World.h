@@ -1,7 +1,7 @@
 #pragma once
 namespace World
 {
-    bool FindGWorld(ProfileGen& PG)
+    bool FindGWorld()
     {
         MEMORY_BASIC_INFORMATION memInfo;
         for (char *p = (char *)moduleInfo.lpBaseOfDll;
@@ -25,7 +25,7 @@ namespace World
                         auto relative = Algorithm::ReadAs<int32_t>(GWorldLoc+0x8);
                         auto GWorldAddress = GWorldLoc+relative+0xC;
                         std::cout <<"GWorld Address: 0x"<<std::hex << GWorldAddress<<std::endl;
-                        PG.GetProfile().GWorldOffset=GWorldAddress-reinterpret_cast<int64_t>(BaseAddress);
+                        ProfileGen::GetProfile().GWorldOffset=GWorldAddress-reinterpret_cast<int64_t>(BaseAddress);
                         return true;
                     }
                     
@@ -41,10 +41,7 @@ namespace World
           p += memInfo.RegionSize)
         {
 
-           /* if(reinterpret_cast<int64_t>(memInfo.BaseAddress)==0x7fF7C39a1000)
-            {
-                std::cout<<std::endl;
-            }*/
+      
             if (VirtualQueryEx(hProcess, p, &memInfo, sizeof(memInfo)) )
             {
                 size_t Size = memInfo.RegionSize;
@@ -90,7 +87,7 @@ namespace World
                         auto relative =Algorithm::ReadAs<int32_t>(lastfound+0x3);
                         auto GWorldAddr = lastfound+relative+0x7;
                         std::cout <<"GWorld Address: 0x"<<std::hex<<GWorldAddr<<std::endl;
-                        PG.GetProfile().GWorldOffset=GWorldAddr-reinterpret_cast<int64_t>(BaseAddress);
+                        ProfileGen::GetProfile().GWorldOffset=GWorldAddr-reinterpret_cast<int64_t>(BaseAddress);
                         return true;
                     }
                     std::cout<<"GWorld Not Found"<<std::endl;

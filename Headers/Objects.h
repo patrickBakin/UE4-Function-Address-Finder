@@ -1,7 +1,7 @@
 #pragma once
 namespace Object
 {
-    bool FindGObject(ProfileGen& PG)
+    bool FindGObject()
     {
         MEMORY_BASIC_INFORMATION memInfo;
 
@@ -23,7 +23,7 @@ namespace Object
                         int relative=*(int32_t*)(&buffer[foundFirstInstructionIndex+14]);
                         int64_t GUObjectArray = (int64_t)StartAddress +foundFirstInstructionIndex+14+relative+4;
                         std::cout <<"Found GObject: 0x"<<std::hex<<GUObjectArray<<std::endl;
-                        PG.GetProfile().GObjectOffset=GUObjectArray-reinterpret_cast<int64_t>(BaseAddress);
+                        ProfileGen::GetProfile().GObjectOffset=GUObjectArray-reinterpret_cast<int64_t>(BaseAddress);
                         return true;
                     }
                 }
@@ -32,9 +32,9 @@ namespace Object
             StartAddress = StartAddress + memInfo.RegionSize;
         }
         
-        if(PG.GetProfile().SpawnActorFTransOffset!=0x0)
+        if(ProfileGen::GetProfile().SpawnActorFTransOffset!=0x0)
         {
-            auto SpawnActorFTransAddr = reinterpret_cast<int64_t>(BaseAddress)+ PG.GetProfile().SpawnActorFTransOffset;
+            auto SpawnActorFTransAddr = reinterpret_cast<int64_t>(BaseAddress)+ ProfileGen::GetProfile().SpawnActorFTransOffset;
             auto cmpJge= Algorithm::ScanFor(SpawnActorFTransAddr,{0x3B,0x05,0xFF,0xFF,0xFF,0xFF,0x7D,0xFF},false);
             auto leaMov = Algorithm::ScanFor(cmpJge,{0x48,0x8D,0xFF,0x40,0x48,0x8B,0x05,0xFF,0xFF,0xFF,0xFF},false,50)+0x4;
             auto relative1 = Algorithm::ReadAs<int32_t>(cmpJge+0x2);
@@ -46,18 +46,18 @@ namespace Object
             if(offset ==0x14)
             {
                 std::cout<<"Using FChunkedFixedUObjectArray"<<std::endl;
-                PG.GetProfile().IsUsingFChunkedFixedUObjectArray=true;
+                ProfileGen::GetProfile().IsUsingFChunkedFixedUObjectArray=true;
                 
                 std::cout<<"Found GObject: 0x"<<GObjectAddress<<std::endl;
-                PG.GetProfile().GObjectOffset= GObjectAddress- reinterpret_cast<int64_t>(BaseAddress);
+                ProfileGen::GetProfile().GObjectOffset= GObjectAddress- reinterpret_cast<int64_t>(BaseAddress);
                 return true;
             }
             if(offset ==0xC)
             {
                 std::cout<<"Not Using FChunkedFixedUObjectArray"<<std::endl;
-                PG.GetProfile().IsUsingFChunkedFixedUObjectArray=false;
+                ProfileGen::GetProfile().IsUsingFChunkedFixedUObjectArray=false;
                 std::cout<<"Found GObject: 0x"<<GObjectAddress<<std::endl;
-                PG.GetProfile().GObjectOffset= GObjectAddress- reinterpret_cast<int64_t>(BaseAddress);
+                ProfileGen::GetProfile().GObjectOffset= GObjectAddress- reinterpret_cast<int64_t>(BaseAddress);
                 return true;
             }
 
