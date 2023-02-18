@@ -24,18 +24,18 @@ namespace UName
         const auto BeforeCallGetName =Algorithm::ScanFor(GetNamesStrAddr,{0xBA,0x01,0x00,0x00,0x00,0x48,0x8B,0xC8,0xE8},true);
         if(BeforeCallGetName>=0)
         {
-          const auto CallGetNameFunction = Algorithm::ScanFor(BeforeCallGetName,{ 0xE8, 0xFF,0xFF,0xFF,0xFF,0xFF,0x8B},true);
+          const auto CallGetNameFunction = Algorithm::ScanFor(BeforeCallGetName,{ 0xE8, 0xFF,0xFF,0xFF,0xFF,0xFF,0x8B},true,70);
           if(CallGetNameFunction>=0)
           {
             const auto indexE8 =CallGetNameFunction-reinterpret_cast<int64_t>(memInfo.BaseAddress);
             const auto relative = *reinterpret_cast<int*>(&buffer[indexE8+1]);
-            const auto GetNameFunctionAddress = CallGetNameFunction+relative+4;
-            if(const auto NamesDataMov = Algorithm::ScanFor(GetNameFunctionAddress,{0x48,0x8B},false))
+            const auto GetNameFunctionAddress = CallGetNameFunction+relative+5;
+            if(const auto NamesDataMov = Algorithm::ScanFor(GetNameFunctionAddress,{0x48,0x8B},false,50))
             {
               int indexMov = NamesDataMov-reinterpret_cast<int64_t>(memInfo.BaseAddress);
               int relaTive = *reinterpret_cast<int*>(&buffer[indexMov+3]);
               const auto NamesDataAddress = NamesDataMov+3 +relaTive+4;
-              std::cout << "Found GName 0x"<<std::hex<< NamesDataAddress<<std::endl;;
+              std::cout << "Found GName 0x"<<std::hex<< NamesDataAddress<<std::endl;
               TNameEntryArray::Names = new TNameEntryArray(NamesDataAddress);
               ProfileGen::GetProfile().GNameOffset=NamesDataAddress-reinterpret_cast<int64_t>(BaseAddress);
               

@@ -137,7 +137,7 @@ namespace UName
         void DumpName(std::ofstream& D,int& NameNum)
         {
             int i=0;
-            int Num;
+            int Num=0;
             while( GetItemPtr(i))
             {
 
@@ -146,7 +146,7 @@ namespace UName
                 std::string name = NameEntry.GetAnsiNameValue();
                 if(name!="Not Found")
                 {
-                    Num=GetNames()->GetById(i).GetIndexValue()/2;
+                    Num=NameEntry.GetIndexValue()/2;
                     D <<"["<<std::uppercase<<std::hex<<Num<<"] "<<name<<"\n";
                     
                     

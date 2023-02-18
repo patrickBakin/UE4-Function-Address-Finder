@@ -32,7 +32,9 @@ namespace Algorithm
     int result = -1;
     for (int i = 0; i < arraySize; i++) {
       while (j > 0 && (pattern[j] != array[i] && pattern[j] != 0xff)) {
+        i=i-j+1;
         j = partialMatchTable[j - 1];
+        
       }
       if (pattern[j] == array[i] || pattern[j] == 0xff) {
         j++;
@@ -43,11 +45,14 @@ namespace Algorithm
         } else {
           return i - patternSize + 1;
         }
+        i=i-j+1;
         j = partialMatchTable[j - 1];
+        
       }
     }
 
     return result;
+  
     
   }
 
@@ -55,7 +60,7 @@ namespace Algorithm
   {
     int64_t result=-1;
     //size_t Size =3000;
-    StartAddress = lastresult ? StartAddress-Size:StartAddress ;
+    StartAddress = lastresult ? StartAddress-static_cast<int64_t>(Size):StartAddress ;
     
     std::vector<BYTE> buffer(Size);
     size_t bytesRead;
